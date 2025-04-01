@@ -1,0 +1,247 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+\title{Lecture Panayotis Mertikopoulos}
+\author{Julien Armand}
+\date{February 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+J'ai remarqué que Panayotis Mertikopoulos était l'auteur de plusieurs papiers qui m'ont été partagés par Maxime et Audrey.  Son expertise est en théorie des jeux, apprentissage et optimisation.  J'ai jugé important de survoler l'ensemble de son oeuvre pour extraire les éléments pertinents qui peuvent s'appliquer pour mon projet, soit la présence de feedback loops lors de la dynamique d'apprentissage dans des systèmes multi-agents. Dans ce texte, je vais passer en revue ses articles disponibles sur arXiv du plus récents au plus anciens.
+
+\section{Accelerated regularised learning in finite n-person games \cite{lotidis_accelerated_2024} 2024}
+\subsection{Commentaires rapides}
+Dans cet article, les auteurs étudient la rythme de convergence de l'algorithme "Follow the accelerated leader (FTXL)" vers un équilibre de Nash avec un "(Bandit / Payoff-based feedback)" sur le jeu de congestion et sur un zero-sum game.
+\subsection{Lien avec mon projet}
+Il y a les concepts de récompenses-bandit, ainsi que le jeu de congestion qui pourrait être important pour mon projet, mais je ne pense pas, à première vue, pouvoir tirer quelque chose de cet article. 
+
+\section{\textit{No-regret learning in Harmonic games: Exploration in the face of conflicting interests }\cite{legacci_no-regret_2024} [Décembre 2024]}
+
+\subsection{Contexte de l'article et information sur la connaissance de la dynamique en multi-agent}
+ Les auteurs [Legacci, Mertikopoulos] notent dans l'abstract que "The long-run behavior of multi-agent learning - and, in particular, no-regret learning - is relatively weel-understood in potential games, where players have aligned interests. By contrast, in harmonic games - the strategic counterpart of potential games, where player have conflicting interest - very little is known outside narrow subclass of 2-player zero-sum games with fully-mixed equilibrium".
+ \\
+ \\
+ 
+ \subsection{Début d'explications sur certains concepts de théorie des jeux}
+Plusieurs concepts importants sont nommés dans cette première phrase et risquent de revenir dans mon projet ou dans le domaine de la théorie des jeux : \begin{itemize}
+    \item potential games
+    \item harmonic games
+    \item zero-sum games
+\end{itemize}.\\ Voici quelques informations sur ces concepts: Un résultat théorique nous dit que tout jeu fini peut être décomposé (de manière unique) en la somme d’un jeu potentiel, d’un jeu harmonique et d’un jeu trivial (Candogan et al). 
+% Modifie la dernière phrase
+Un exemple de jeu de potentiel est le jeux de la coordination. Tous les zeros-sum games sont des jeux harmoniques, donc Roche-Papier-ciseaux,  Matching pennies.
+Le dilemme du prisonnier ou battle of the sexes peuvent être décomponsé dans les deux catégories. En général on peut s'attendre dans les jeux de potentiel a une convergence vers un équilibre (de Nash ) tandis que dans les jeux de potentiel, on peut souvent s'attendre à la présence d'un cycle et pas de convergence. 
+
+\subsection{Contribution de l'article}
+Dans cet article, les auteurs vont examiner un paradigme d'apprentissage populaire pour ce type de jeux : follow-the-regularized-leader (FLTR). Les contributions de leur articles seront les suviantes : 
+\begin{quote}
+Starting with a continuous-time model of no-regret learning, we show that all FTRL
+dynamics are Poincaré recurrent in all harmonic games. This generalizes and extends
+NO-REGRET LEARNING IN HARMONIC GAMES 3
+the recent result of Legacci et al. [35] for the replicator dynamics in uniform harmonic
+games (a subclass of harmonic games in which the uniform distribution is always a
+Nash equilibrium).
+\end{quote}
+
+\begin{quote}
+(2) In discrete-time models of learning, the standard implementation of FTRL cannot be
+expected to converge (since it fails to do so in Matching Pennies). To correct this
+behavior, we consider a flexible algorithmic template, inspired by Azizian et al. [3] and
+dubbed extrapolated FTRL (FTRL+), which augments FTRL with a forward-looking,
+extrapolation step (including as special cases the optimistic and extra-step variants of
+FTRL, cf. Section 4). We then establish the following results:
+(a) Under extrapolated FTRL, players are guaranteed constant individual regret (so,
+as a consequence, the players’ empirical frequency of play converges to coarse
+correlated equilibrium at a rate of O(1/T)).2 This should be contrasted with the
+results of [13, 14] who showed that players can achieve polylogarithmic regret in
+any game (finite or convex).
+(b) The induced trajectory of play converges to Nash equilibrium from any initial
+condition.
+\end{quote}
+
+\subsection{Explication rapide fournie par Chatgpt sur FTRL}
+\begin{quote}
+    Follow-the-Regularized-Leader (FTRL) est un algorithme d’apprentissage en ligne qui améliore la stratégie Follow-the-Leader (FTL) en ajoutant une régularisation pour éviter des décisions instables. Dans FTL, un agent choisit à chaque étape l’action qui a donné les meilleurs résultats cumulés jusqu’à présent. Cependant, cette approche peut conduire à des oscillations excessives lorsque les gains varient fortement. FTRL corrige cela en intégrant un terme de régularisation qui pénalise les décisions extrêmes ou brusques, stabilisant ainsi l’apprentissage. Concrètement, FTRL sélectionne la prochaine action en maximisant la somme des gains passés moins une pénalité régularisatrice, souvent définie par une fonction d’entropie ou une norme. Cette approche est particulièrement utile en théorie des jeux et en optimisation, où elle permet de contrôler le regret (écart entre la performance réelle et la meilleure stratégie possible en rétrospective), garantissant une convergence plus robuste vers des équilibres stables.
+\end{quote}
+
+\subsection{Ajout pour mon projet}
+Dans l'article, on s'intéresse aux questions suivantes qui sont proches de ma question de recherche : 
+\\
+\begin{quote}
+    What is the behavior of no-regret algorithms and dynamics in harmonic games?
+\end{quote}
+
+\begin{quote}
+    The question of “as if” rationality – that is, whether selfishly-minded, myopic agents
+may learn to behave “as if ” they were fully rational – has been one of the cornerstones of
+non-cooperative game theory, and for good reason
+\end{quote}
+
+Ils ont des résultats théoriques pour une classe de jeux matriciels sur le comportment d'un type d'algorithme. 
+
+
+\section{The rate of convergence of Bregman proximal methods: Local geometry vs. regularity vs. sharpness \cite{azizian_rate_2024}}
+Aucun lien 
+
+\section{What is the long-run distribution of stochastic gradient descent? \cite{azizian_what_2024}}
+Aucun lien 
+
+\section{Nested replicator dynamics, nested logit choice and similarity-based learning \cite{mertikopoulos_nested_2024}}
+\subsection{Explication du but de l'article}
+Dans cet article, ils vont s'intéresser à l'apprentissage par imitation (un peu comme pour target-UCB, mais en regardant plus classiquement les payoffs plutôt que les actions) : "the revisiting agent observes the behavior of a randomly selected individual, and then switch to the strategy of the observed agent with a probability that may depend on the revising agent's incumbent payoff, the payoff of the observed strategy, or both. " La partie nested est pour étudier qu'est ce qui arrive si le pairage des agents est plus fréquent lorsqu'ils ont une stratégie similaire: "an agent may be biases toward sampling similar strategies rather than dissimilar ones" pour se poser la question suivante : "How are the dynamics affected if players are more likely to observe and compare strategies that are more similar to their current ones?"
+Pour étudier ça, ils vont utiliser les "evolutionnary game" qui étudient l'évolution de populations d'agents. Ils vont s'intéresser à la convergence vers des équilibres de Nash ou des équilibres appelés "Evolutionnary stable states"
+
+\subsection{Explication des liens possibles avec mon projet et les résultats}
+Dans la première partie de l'article, ils vont définir un protocole de révision (régles qui dictent comment les agents changent de stratégie) qui provient plus de régles d'évolution en deux versions non-nested et nested. C'est moins intéressant pour moi, mais ils vont utiliser Roche-Papier-Ciseaux et faire le lien avec le replicator dynamic (Des équations différentielles qui permettent, entres autres, d'étudier les jeux jeux évolutionnistes et les populations animales. Des concepts que j'ai regardé au début de mon projet). Ils ont aussi deux versions du graphique triangulaire pour roche-papier-ciseaux que j'ai montré à Maxime (Diagramme ternaire pour illuster l'évolution des populations). 
+Dans la deuxième partie, plus intéressante pour mon projet, ils vont regarder l'"Evolution through reinforcement and nested logit choice". C,est un protocole de révision qui est plus proche de mon projet. Ils vont faire le lien avec le "nested replicator dynamics". Ils vont faire la remarque que "The exponential weights scheme (EW) is one of the staples of the online learning literature and its origins can be traced to the work of [...] and Auer et al. (1995, 2002) on multi-armed bandits". Il y a une équivalence entre la "replicator dynamic" et la "exponential weights (EW) dynamics" et ils veulent voir s'ils peuvent avoir les mêmes liens avec leur "nested replicator dynamic" et leur nested exponential weight scheme. Dans leur théorème II, ils affirment que si une "fonction ?" est une "solution orbit" du Nested exponential weights, alors elle satifait le nested replicator dymamic avec certaines particularités. Je pense que le concept de solution orbits sera utile pour étudier la présence de cycle.
+
+\subsection{En resumé}
+Roche-papier-ciseaux, la théorie des jeux évolutif, les équilibres "evolutionary stable state", le "replicator dynamics", les "solutions orbits" sont des concepts qui peuvent être importants dans mon projet. La partie nested moins, mais il faudrait que je je le lise plus en détails pour en retirer quelque chose. 
+
+\section{Tamed Langevin sampling under weaker conditions\cite{lytras_tamed_2024}}
+Aucun lien
+
+\section{A geometric decomposition of finite game \cite{legacci_geometric_2024}}
+
+\subsection{Résumé de l'article}
+Dans l'article, les auteurs veulent relié la décomposition des dynamiques d'un jeu à la décomposition d'un champs de vecteur par le théorème d'Helmhotz's en une composante potentiel (sans rotationnel) et une composante incomprésible (sans divergence). Ce sont des concepts que j'ai vu il y a longtemps en calcul 2 ou en électricité) lors de la dynamique par exponential weight. Ils vont se concentrer sur le temps continu qui élimine les complications relié aux hyperparamètres des joueurs ou de la "feedback structure".
+\\
+Dans l'article, ils notent que "except for some special cases, the behavior of the replicator dynamics in harmonics games is not well understood". Ils notent aussi que : "The replicator dynamics (RD) comprise the cornerstone of evolutionary game theory and, as such, their rationality properties have been the subject of intense study in the literature, cf. [37, 74, 86] and references therein. For all these reasons, the dynamics (EW)/(RD) will be our main focus in the sequel."
+\\
+Les résultats sont les suivants: 
+\begin{quote}
+    First, in addition to being volume-preserving, the continuous-time EW dynamics in incompressible games admit a constant of motion and are Poincaré recurrent
+\end{quote}
+\\
+\begin{quote}
+Building further on the above, we also show that EW dynamics are Poncarré recurrent in harmonic games.
+\end{quote}
+\\
+Les premiers théorèmes sont sur la géométrie des jeux, les thérorèmes suivants sont plus courts et plus reliés plus directement à mon sujet : 
+\begin{quote}
+    If a game is incompressible, the induced dynamics (EW) / (RD) admit a constant of motion. Specifically, there exists a function E : X ◦ → R such that E(x(t)) = E(x(0)) for every initial condition x(0) ∈ X ◦.
+\end{quote}
+\\
+\begin{quote}
+    If a game is harmonic, the dynamics (EW) / (RD) are Poincaré recurrent
+\end{quote}
+
+%Ajoute plus d'explications et plus de sources
+
+\subsection{Autres résultats importants}
+\begin{quote}
+    This takes us to the negative end of the spectrum. If we focus on the evolution of the players’ strategies, a series of well-known impossibility results by Hart & Mas-Colell [31, 32] have established that there are no uncoupled learning dynamics – deterministic or stochastic, in either continuous or discrete time – that converge to Nash equilibrium (NE) in all games from any initial condition.
+\end{quote}
+
+\subsection{Éléments importants que je n'ai pas regardé}
+\begin{itemize}
+    \item nonlinear Riemannian structure on the simplex
+    \item Shahshahani metric
+    \item characterize bimatrix games where standard classes of no-regret learning exhibit Lyapunov chaos
+    \item coarse corralated equilibra (CCE)
+    \item Conley’s decomposition theorem
+\end{itemize}
+
+\subsection{Conclusion}
+Cet article apporte des résultats directs sur EW pour une grande classe de jeux. 
+\\ Les outils mathématiques basés sur l'équivalence entre les jeux harmoniques et les jeux incomprésibles semblent très intéressants. Il faudrait vérifier comment les simplifications (temps continu, par exemple) affectent la généralisation des résultats.
+
+\section{On the discrete-time origins of the replicator dynamics \cite{falniowski_discrete-time_2024}}
+\subsetion{Résumé de l'article}
+Dans cet article, on va avoir certaines réponses pour le cas discret plutôt que continue comme le précédent article.
+Ils vont comparer trois modèles discrets: 
+\begin{quote}
+    a biological model based on intra-species selective pressure, the dynamics induced by pairwise proportional imitation, and the exponential / multiplicative weights algorithm for online learning.
+\end{quote}
+Le dernier va être plus intéressant pour nous. 
+Ils vont utiliser des jeux symmétriques 2*2 et le jeu de congestion et montrer que les résultats différents entre les trois modèles. 
+
+\subsection{Résultat de l'aticle}
+\begin{quote}
+    for the exponential / multiplicative weights (EW) algorithm increasing step size will (almost) inevitably lead to chaos (again, in the formal, Li-Yorke sense). This divergence of behaviors comes in stark contrast to the globally convergent behavior of the replicator dynamics, and serves to delineate the extent to which the replicator dynamics provide a useful predictor for the long-run behavior of their discrete-time origins.
+\end{quote}
+
+\subsection{Lien avec mon projet}
+Cet article présente des résultats pour EW sur des jeux importants. Il note des différences entre le replicator dynamique et Ew. Il m'introduit à la notion de chaos de Li-Yorke. Il explique que l'augementation du step-size amène au chaos, donc c'est un résultat direct sur la dynamique d'apprentissage et le résultat.
+
+
+\section{Exploiting hidden structures in non-convex games for convergence to {Nash} equilibrium \cite{sakos_exploiting_2023}}
+
+\subsection{Résumé rapide}
+Dans cet article, on parle de différents jeux matriciel et brièvement de d'apprentissage par renforcement multi-agent. On parle des jeux convexes ou non-convexes et de leur convergence vers l'équilibre de Nash. Il y a two-player convex-concave min-max game, diagonally convex N-player games. Ils vont faire une expérience avec Roche-papier-ciseaux avec des stratégies encodé par des MlP et montre qu'en utilisant PHGP(preconditionned hidden gradient descent), les deux joueurs vont identifier l'équilibre (1/3, 1/3, 1/3).
+\subsection{Lien avec mon projet}
+Il y a des concepts de théories des jeux importants qui n'ont pas été mentionnés dans les articles précédents, mais je ne pense pas que je peux utiliser cet article pour faire quelque chose parce que la méthode utilisé ne semble pas être dans mon domaine. 
+
+\section{Payoff-based learning with matrix multiplicative weights in quantum games \cite{lotidis_payoff-based_2023}}
+
+\subsection{citations importantes}
+\begin{quote}
+    The main difficulty to attaining convergence in this setting is that, in contrast to classical finite games, quantum games have an infinite continuum of pure states (the quantum equivalent of pure strategies), so standard importance-weighting techniques for estimating payoff vectors cannot be employed. Instead, we borrow ideas from bandit convex optimization and we design a zeroth-order gradient sampler adapted to the semidefinite geometry of the problem at hand
+\end{quote}
+
+\subsection{Bandit learning in N -player quantum games}
+La dernière section apporte un théorème de convergence dans ce cas-là. 
+
+\subsection{Utilité}
+L'article est probablement inutile pour moi, mais peut apporter un mot-clé vendeur ou un sujet de converstation avec Aaron. 
+
+\section{The equivalence of dynamic and strategic stability under regularized learning in games \cite{boone_equivalence_2023}}
+\subsection{Information de l'article}
+L'article étudie les propriétés de Hedge, Exp3.
+\\
+Les auteurs vont se poser la question : "If every player follows an iterative procedure aiming to increase their individual payoff, does the players’ long-run behavior converge to a rationally admissible state?"
+\subsection{Rappel d'un résultat important}
+\begin{quote}
+    In this paper, we examine the long-run behavior of regularized, no-regret learning in finite games. A well-known result in the field states that the empirical frequencies of no-regret play converge to the game’s set of coarse correlated equilibria;
+\end{quote}
+
+\subsection{Nouvelles notions que j'ai moins regardées}
+\begin{itemize}
+    \item Hamman consistency
+    \item closedness under better replies (club)
+\end{itemize}
+
+\subsection{Résultats importants pour mon projet}
+\begin{quote}
+    Finally, we also estimate the rate of convergence to club sets, and we establish convergence at a geometric rate for entropically regularized methods – like Hedge and EXP3 – and in a finite number of iterations under projection-based methods.
+\end{quote}
+
+\section{Riemannian stochastic optimization methods avoid strict saddle points \cite{hsieh_riemannian_2023}}
+Aucun lien
+
+\section{On the convergence of policy gradient methods to Nash equilibria in general stochastic games \cite{giannou_convergence_2022}}
+\subsection{Résumé de l'article}
+L'article parle des stochastic games aussi appelé Markov game. Ce type de jeux généralise les MDP pour gérer les intéractions entre de multiples joueurs (wikipédia). Ça risque d'être essentiel que j'en parle dans mon projet. 
+\\ 
+Dans l'article, ils font référence à des concepts dont Audrey m'a parlé en rencontre : 
+\\
+\begin{quote}
+    Learning in stochastic games is a notoriously difficult problem because, in addition to each other’s strategic decisions, the players must also contend with the fact that the game itself evolves over time, possibly in a very complicated manner
+\end{quote}
+\\
+\begin{quote}
+    At each point in time, the players are at a given state which determines the rules of the game for that stage. The actions of the players in this state determine not only their instantaneous payoffs (as defined by the stage game), but also the transition probabilities towards the next state of the process. In this way, each player has to balance two distinct – and often competing – objectives: optimizing the payoffs of today versus picking a possibly suboptimal action which could yield significant benefits tomorrow (i.e., by influencing the transitions of the process towards a more favorable state for the player).
+\end{quote}
+
+\subsection{Résultats de l'article}
+
+\subsection{Lyapunov function}
+Dans cet article, il parle de  Lyapunov functions. C'est un concept qui revient souvent dans les travaux de Panayotis Mertikopoulos. Wikipedia nous dit que : 
+\begin{quote}    
+the theory of ordinary differential equations (ODEs), Lyapunov functions, named after Aleksandr Lyapunov, are scalar functions that may be used to prove the stability of an equilibrium of an ODE. Lyapunov functions (also called Lyapunov’s second method for stability) are important to stability theory of dynamical systems and control theory. Étant donné que le framework the l'article sur les feedback loops \cite{mansoury_feedback_2020} se base sur le framework des systèmes dynamiques, ça pourrait être utile.
+\end{quote}
+
+\subsection{Matringale et supermartingale}
+\begin{itemize}
+    \item Doob’s submartingale convergence theorem
+    \item Chung’s lemma
+\end{itemize}
+
+
+%Legacci
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}

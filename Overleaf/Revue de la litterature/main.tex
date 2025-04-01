@@ -1,0 +1,405 @@
+\documentclass{article}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{csquotes}
+
+% if you need to pass options to natbib, use, e.g.:
+%     \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2021
+
+% ready for submission
+\usepackage{neurips_2021}
+
+% IMPORTANT: if you are submitting attention track, please add the attention option:
+% \usepackage[attention]{neurips_2021}
+
+% to compile a preprint version, e.g., for submission to arXiv, add add the
+% [preprint] option:
+%     \usepackage[preprint]{neurips_2021}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+%     \usepackage[final]{neurips_2021}
+
+% to avoid loading the natbib package, add option nonatbib:
+%    \usepackage[nonatbib]{neurips_2021}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{amsthm}         % pour les définitions mathématiques
+\usepackage{amssymb}
+\usepackage{natbib} 
+\usepackage{bm} 
+\usepackage{float}
+\usepackage{stfloats}
+\usepackage{multirow}
+\theoremstyle{definition}
+\newtheorem{definition}{Définition}
+
+\captionsetup[subtable]{justification=centering}
+\captionsetup[subtable]{justification=centering}
+
+\title{Revue de littérature sur les boucles de rétroactions en système multi-agents}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Dans les environnements multi-agents, le comportement des autres agents influe grandement ce à quoi est exposé l'agent d’intérêt et cela détermine grandement ses possibilités d'apprentissage. La question qui guidera cette revue de la littérature sera la suivante : dans un système multi-agents, de quelle manière le comportement des autres agents influence-t-il l’apprentissage et la performance d’un agent individuel dans l’atteinte d’une solution optimale ? Avec la multiplication de système d'intelligence artificielle avec un apprentissage continu dans notre quotidien, il est légitime de se demander quels impacts les interactions entre ces différents systèmes pourraient avoir sur leur performance et sur les solutions qu’ils parviennent à identifier. Tout d'abord, pour introduire le 
+% Boucle de rétroaction pas bien définie
+sujet, cette revue de la littérature va rapporter les différents types de boucle de rétroaction susceptibles d’influencer l’environnement lors de l’ajout d’un système unique. Ensuite, étant donné que la majorité des travaux en environnements multi-agents qui porte sur cette question, s’appuient sur la théorie des jeux — notamment les jeux matriciels, répétés, itérés, évolutifs ou de Markov — dans des contextes purement coopératifs, purement compétitifs ou mixtes, j'expose certaines définitions clés avant d’aborder les résultats pertinents dans ce domaine. Pour conclure, cette revue de la littérature traite également de certaines modélisations dans lesquelles cette question occupe une place importante et fait l’objet de recherches récentes.
+
+%Dans le cas multiagent, il a été prouver que l'apprentisasge local est non-markovien et que la non-stationnarity rules...\citet{laurent_world_2011}
+
+\end{abstract}
+
+
+
+\section{Introduction aux boucles de rétroaction}
+Les boucles de rétroaction se produisent lorsque les sorties d'un modèle, influencent ou définissent les entrées du modèle dans un pas de temps futur. 
+Dans la revue de la littérature de \citet{pagan_classification_2023}, les auteurs proposent une classification des boucles de rétroaction dans les systèmes de prise de décisions automatisées. Ils identifient cinq problèmes principaux : boucles de rétroaction d'échantillonnage, individuelles, des caractéristiques, des prédictions et du modèle. Ces boucles peuvent perpétuer, renforcer ou même atténuer les biais présents dans ces systèmes. Bien que ce ne soit pas directement le sujet de la présente revue de la littérature, la classification et les exemples fournis dans cette revue de la littérature permettent de comprendre rapidement les types de modification à l'environnement que l'ajout d'un système ou agent peut amener à cet environnement. 
+%assure toi d'introduire plus formellement les boucles de rétroaction
+%Changer la traduction des boucles
+
+\subsection{Classification de \citet{pagan_classification_2023}}
+
+\subsubsection{Boucle de rétroaction d’échantillonnage}
+Cette forme de boucle de rétroaction est illustrée par l'article de \citet{mozannar_fair_2020}, qui examine l’utilisation de systèmes de prise de décisions automatisées pour les admissions universitaires 
+Les candidats possèdent des caractéristiques qui les placent dans différents groupes. Si, lors des premières utilisations de ces systèmes, un groupe spécifique constate qu'il a moins de chances de réussir le processus de sélection, ses membres pourraient être moins enclins à postuler à l'avenir. Ainsi, la présence du système modifie l'environnement en altérant la répartition des groupes de candidats. Au fil du temps, cette attrition dans le bassin de candidats pour un groupe identifié peut entraîner une modification de la composition des admis, convergeant vers un équilibre différent qui n'est pas nécessairement optimal à cause de cette boucle de rétroaction.
+
+\subsubsection{Boucle de rétroaction chez les individus}
+Dans cette boucle de rétroaction, le système de prise de décisions automatisées influence directement le comportement des individus. Contrairement à la boucle de rétroaction d'échantillonnage, qui modifie la composition globale d'une population, la boucle individuelle affecte les actions spécifiques des personnes. En reprenant l'exemple d'un système d'aide à l'admission universitaire, imaginons qu'il accorde une importance particulière au bénévolat lors de la sélection des étudiants. Sachant cela, les futurs candidats pourraient être incités à s'engager davantage dans des activités bénévoles pour augmenter leurs chances d'admission. Ainsi, la présence de ce système modifie l'environnement en influençant directement les actions des individus. Cependant, si une proportion trop importante d'étudiants adopte cette stratégie, le bénévolat pourrait perdre de sa pertinence en tant que critère distinctif, rendant le processus de sélection moins efficace.
+
+\subsubsection{Boucle de rétroaction sur les caractéristiques}
+Un système de décisions automatisées peut également influencer la manière dont les caractéristiques des individus sont observées ou rapportées. En reprenant l'exemple du bénévolat, certains étudiants pourraient être tentés de surestimer ou de falsifier le nombre d'heures de bénévolat déclarées dans leurs dossiers. Dans ce contexte, le système n'a pas modifié les individus eux-mêmes, mais a affecté la fiabilité des caractéristiques mesurées, introduisant ainsi des données inexactes dans le processus décisionnel.
+
+\subsubsection{Boucle de rétroaction sur le modèle}
+Ce type de boucle de rétroaction concerne les modèles qui s'adaptent en fonction de nouvelles données influencées par leurs propres décisions passées. Dans le contexte des admissions universitaires, un système automatisé pourrait ajuster ses critères en se basant sur les performances académiques des étudiants précédemment admis. Cependant, cette approche présente un biais potentiel : le modèle n'évalue que les résultats des étudiants admis, sans considérer ceux des candidats non retenus. Cette absence de données sur les non-admis limite la capacité du système à apprendre de l'ensemble complet des candidats potentiels, ce qui peut conduire à des décisions sous-optimales et perpétuer des biais existants.
+
+\subsubsection{Boucle de rétroaction sur les prédictions}
+Cette catégorie de boucles de rétroaction concerne les systèmes qui prédisent l'évolution des individus pour orienter les actions futures, lesquelles peuvent à leur tour modifier la probabilité du résultat prédit. Un exemple pertinent dans le domaine de l'éducation est l'effet Pygmalion. Dans une étude de \citet{brookover_review_1969}, des enseignants ont été informés que certains élèves étaient susceptibles de réaliser des progrès intellectuels significatifs au cours de l'année scolaire, sur la base d'un système de prédiction, un test fictif. En réalité, ces élèves avaient été choisis aléatoirement. Les enseignants, convaincus de leur potentiel, ont inconsciemment modifié leur comportement envers ces élèves, leur offrant plus d'attention et d'encouragements. En conséquence, ces élèves ont effectivement affiché des améliorations de performance plus marquées que leurs pairs. Le système de prédiction même complètement aléatoire affichait de bonne performances pour sa classification. 
+
+
+\subsection{Enseignements tirés}
+Cette initiation aux systèmes de décisions automatisées expose comment l'intégration de tels systèmes peut modifier l'environnement, le rendant instable, et amener les algorithmes à atteindre des équilibres différents. Ces changements peuvent impacter l'évaluation des performances du modèle et avoir des répercussions potentiellement importantes sur la vie quotidienne de nombreuses personnes. La suite de cet revue de la littérature se concentrera sur des scénarios impliquant plusieurs systèmes dans un cadre multi-agents. Notamment, nous examinerons les interactions entre systèmes apprenants, qui génèrent des boucles de rétroaction. Chaque agent, en ajustant son comportement en réponse à son expérience et ses interactions avec les autres, peut transformer l'environnement commun, influençant ainsi les apprentissages futurs de tous les agents.
+
+\section{Introduction théorie des jeux}
+Pour étudier les boucles de rétroaction et les difficultés qu’un agent apprenant peut avoir en présence d’autres agents apprenants, la majorité des travaux traitant de questions connexes se sont concentrés sur la théorie des jeux. C’est un moyen simple de suivre ces difficultés sans ajouter de complexité non-essentielle. C'est pourquoi je vais introduire des définitions importantes.
+
+\subsection{les jeux à forme normal}
+En utilisant la définition présentée dans \citet{yongacoglu_paths_2024}, un jeu en forme normal est défini par 
+\begin{definition}
+Un jeu en forme normale à $n$ joueurs est défini par le tuple
+\[
+\Gamma = (n, A, r)
+\]
+où :
+\begin{itemize}
+    \item $m \triangleq$ le nombre de joueurs,
+    \item $A = A_{1} \times \cdots \times A_{n} \triangleq$ l'ensemble fini des profils d'actions, chaque $A_{i}$ représentant l'ensemble des actions disponibles pour le joueur $i$,
+    \item $r = (r_{i})_{i \in [m} \triangleq$ la collection des fonctions de récompense, avec chaque fonction $r_{i} : A \rightarrow \mathbb{R}$ décrivant la récompense du joueur $i$ en fonction du profil d'actions.
+\end{itemize}
+\end{definition}
+
+
+\begin{definition}
+Une \emph{bimatrice} représente un jeu à deux joueurs en forme normale. Les lignes correspondent aux actions du joueur 1, les colonnes à celles du joueur 2. Chaque cellule contient un couple $(u_1, u_2)$ où $u_1$ est le gain du joueur 1 et $u_2$ celui du joueur 2. 
+\end{definition}
+
+
+\subsection{Exemple de jeux classiques}
+Ces jeux sont très étudiés dans la littérature. Un résultat important apporté par \citet{candogan_flows_2011} est que tous ces jeux peuvent se décomposer en trois composantes orthogonales : une composante de jeu de potentiel, une composante de jeu harmonique, et une composante dite triviale. La composante de potentiel correspond à des situations où les intérêts des agents sont alignés, favorisant la coordination. À l’opposé, la composante harmonique reflète des situations de conflit, où les joueurs sont en compétition ; on peut y voir une généralisation des jeux à somme nulle, dans lesquels le gain d’un joueur s’accompagne d’une perte équivalente pour les autres. Enfin, la composante triviale regroupe les aspects du jeu sans interaction stratégique, où les gains d’un joueur ne dépendent pas des choix des autres.
+
+\begin{table*}[h]
+\centering
+\small  % Réduit la taille de police à "small"
+\setlength{\tabcolsep}{4pt} % Ajuste l'espacement entre colonnes du tableau principal
+
+\begin{tabular}{cc}  % 2 colonnes dans lesquelles on place nos sous-tableaux
+%%%%%%%%%%%%%%%%%%% LIGNE 1 %%%%%%%%%%%%%%%%%%%
+\begin{subtable}[t]{0.47\textwidth}
+\centering  % Centre le tableau ET la légende
+\begin{tabular}{c|c|c}
+  & Coopérer & Trahir \\ \hline
+Coopérer & $(R, R)$ & $(S, T)$ \\
+Trahir   & $(T, S)$ & $(P, P)$ \\
+\end{tabular}
+\caption{Dilemme du prisonnier\\
+\small $T > R > P > S$ (Jeu mixte)}
+\label{tab:prisoners-dilemma}
+\end{subtable}
+&
+\begin{subtable}[t]{0.47\textwidth}
+\centering
+\begin{tabular}{c|c|c|c}
+  & Roche & Papier & Ciseaux \\ \hline
+Roche    & $(0, 0)$ & $(-1, 1)$ & $(1, -1)$ \\
+Papier   & $(1, -1)$ & $(0, 0)$ & $(-1, 1)$ \\
+Ciseaux  & $(-1, 1)$ & $(1, -1)$ & $(0, 0)$ \\
+\end{tabular}
+\caption{Roche-papier-ciseaux \\ (Jeu harmonique)}
+\label{tab:rps}
+\end{subtable}
+\\[1em]  % Espace vertical entre la 1e et la 2e ligne de tableaux
+
+%%%%%%%%%%%%%%%%%%% LIGNE 2 %%%%%%%%%%%%%%%%%%%
+\begin{subtable}[t]{0.47\textwidth}
+\centering
+\begin{tabular}{c|c|c}
+  & Cerf & Lièvre \\ \hline
+Cerf   & $(a, a)$ & $(0, b)$ \\
+Lièvre & $(b, 0)$ & $(b, b)$ \\
+\end{tabular}
+\caption{Chasse au cerf \\ $a > b > 0$ (Jeu potentiel)}
+\label{tab:stag-hunt}
+\end{subtable}
+&
+\begin{subtable}[t]{0.47\textwidth}
+\centering
+\begin{tabular}{c|c|c}
+  & Option 1 & Option 2 \\ \hline
+Option 1 & $(\alpha, \beta)$ & $(0, 0)$ \\
+Option 2 & $(0, 0)$ & $(\beta, \alpha)$ \\
+\end{tabular}
+\caption{Guerre des sexes \\ $\alpha > \beta > 0$ \\ (Jeu mixte)}
+\label{tab:battle-of-the-sexes}
+\end{subtable}
+\\[1em]  % Espace vertical entre la 2e et la 3e ligne
+
+%%%%%%%%%%%%%%%%%%% LIGNE 3 %%%%%%%%%%%%%%%%%%%
+\begin{subtable}[t]{0.47\textwidth}
+\centering
+\begin{tabular}{c|c|c}
+  & L & R \\ \hline
+A & $(k, k)$ & $(0, 0)$ \\
+B & $(0, 0)$ & $(k, k)$ \\
+\end{tabular}
+\caption{Jeu de coordination \\ $k > 0$ (Jeu potentiel)}
+\label{tab:coordination-game}
+\end{subtable}
+&
+\begin{subtable}[t]{0.47\textwidth}
+\centering
+\begin{tabular}{c|c|c}
+        & Pile      & Face      \\ \hline
+Pile    & $(1, -1)$ & $(-1, 1)$ \\
+Face    & $(-1, 1)$ & $(1, -1)$ \\
+\end{tabular}
+\caption{Matching Pennies (Pile ou face) \\ (Jeu harmonique)}
+\label{tab:matching-pennies}
+\end{subtable}
+
+\end{tabular}
+
+\caption{\textbf{Jeux classiques à deux joueurs}}
+\label{tab:all-two-player-games}
+\end{table*}
+
+
+
+\subsection{Les jeux de Markov} 
+
+Les jeux de Markov introduit en 1953 par \citet{shapley_7_2020} modélisent la dynamique d'un environnement qui évolue en réponse aux actions des joueurs. 
+% Phrase pour lier à mon sujet à changer éventuellemnt 
+C'est un cadre théorique idéal pour étudier l'impact du processus d'apprentissage d'un agent sur le processus d'apprentissage d'un autre 
+(selon \citet{solan_stochastic_2015}). Les jeux de Markov sont une fondation pour un partie importante de la recherche en apprentissage par renforcement multi-agent puisque que ce cadre théorique généralise les MDP (Processus de décision markoviens) et les jeux matriciels (\citet{matignon_independent_2012}).
+Dans le formalisme des jeux de Markov et dans la revue de littérature de \citet{matignon_independent_2012}, cinq difficultés d'apprentissage sont relevées. Dans cette revue de littérature, on définit plutôt ces problèmes d'apprentissage comme des problèmes de coordination, car dans les jeux de Markov, la solution idéale requiert très souvent la coordination des $m$ joueurs.
+
+\subsubsection{Définitions pour les jeux de Markov}
+Concrètement, les jeux de Markov sont joués par un ensemble de m joueurs. À chaque pas de temps, le jeu est dans un certain état.  les m joueurs connaissent cet état et tous utilisent cette information pour choisir une action parmi l'ensemble des actions disponibles. Ce choix d'action ainsi que l'état actuel du jeu déterminent les récompenses obtenues pour chacun des joueurs à ce pas de temps, mais aussi la transition vers le prochain état prochain du jeu. Il y a donc une composante séquentielle auquel les joueurs peuvent tenir compte, puisque si un joueur peut prédire les actions des autre joueurs, il peut choisir de sacrifier une récompense immédiate pour diriger le jeu dans un état qui lui donnera des meilleurs récompenses futures. 
+
+Formellement, la définition des jeux de Markov est la suivante (en reprenant les définitions présentes dans \citet{matignon_independent_2012}) : 
+
+
+\begin{definition}
+Un jeu de Markov est défini par un tuple $(m, S, A_{1}, ..., A_{m}, T, R_{1}, ..., R_{m})$ où :
+\begin{itemize}
+    \item $m \triangleq$ le nombre de joueurs
+    \item $S \triangleq$ l'ensemble fini des états 
+    \item $A_{i} \triangleq$ l'ensemble fini des actions disponibles pour le joueur $i$
+    \item $A = A_{1} \times ... \times A_{m} \triangleq$ l'ensemble joint fini des actions pour les $m$ joueurs 
+    \item $T : S \times A \times S \rightarrow [0,1] \triangleq$ la fonction de transition définie par :
+    \[
+    P(s_{t+1}=s' \mid a_{t} = a, s_{t} = s) = T(s,a,s')
+    \]
+    et telle que :
+    \[
+    \forall s \in S, \forall a \in A, \sum_{s' \in S} T(s,a,s') = 1
+    \]
+    \item $R_{i} : S \times A \rightarrow \mathbb{R} \triangleq$ la fonction de récompense pour l'agent $i$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}
+La politique d'un joueur est définie par $\pi_{i}: S \times A_{i} \rightarrow [0,1]$, une distribution de probabilité sur les actions telle que :
+\[
+\forall a_{i} \in A_{i}, \quad P(a_{i,t}=a_{i} \mid s_{t}=s) = \pi_{i}(s,a_{i}).
+\]
+\end{definition}
+
+\begin{definition}
+L'espérance du gain pour le joueur $i$ dans l'état $s$ lorsque les joueurs suivent la politique conjointe $\bm{\pi}$ à partir du temps $t$ est définie par la fonction :
+\[
+U_{i,\pi}(s) = \mathbb{E}_{\bm{\pi}} \left[ \sum_{k=0}^{\infty} \gamma^{k} r_{i,t+k+1} \mid s_{t} = s \right]
+\]
+où $\gamma \in [0,1]$ est le facteur d'actualisation et $r_{i,t}$ la récompense du joueur $i$ au temps $t$.
+\end{definition}
+
+
+% Ajouter définition pour les jeux répété, itéré, évolutif
+
+
+
+
+\subsection{Catégorisation des difficultés d'apprentissage identifiées dans les jeux de Markov selon \citet{matignon_independent_2012}}
+
+% Je dois définir les équilibres de Pareto
+\subsubsection{Le problème de sélection de Pareto (Pareto-selection problem)}
+
+Considérons une modification au jeu de coordination utilisé dans \citet{claus_dynamics_nodate} 1998 avec deux joueurs et deux actions illustrant très bien ce problème.
+
+\begin{definition}
+    Le premier problème est appelé le problème de sélection de Pareto. Il se manifeste lorsque plusieurs équilibres de Pareto existent, mais qu'il n'existe aucun mécanisme naturel pour coordonner les joueurs vers un équilibre particulier. 
+    %pt reformuler ou ajouter une phrase.
+\end{definition}
+
+\subsubsection{Le problème de non-stationnarité (non-stationarity problem)}
+
+Lorsque les joueurs sélectionnent leurs actions, ils connaissent l'état actuel du jeu, bien qu'ils ignorent les choix des autres joueurs. La fonction de transition est exprimée sur $S \times A \times S$, indiquant que le changement repose sur les actions des autres, même si cela reste invisible pour un joueur donné. Puisque les décisions sont affectées par l'historique de jeu, il est possible pour les joueurs d'ajuster leurs stratégies au fil du temps, ce qui provoque une modification dans la transition d'état perçue par chacun comme une non-stationnarité de l'environnement. Cela est problématique puisse que cette condition est nécessaire pour les garanties des convergence. En d'autres mots, dans les jeux Markoviens, les agents apprenants qui n'ont pas connaissance des autres joueurs, sa perspective locale d'apprentissage apparaît alors comme non-markovienne (prouvé dans \citet{laurent_world_2011}).
+
+\subsubsection{Le problème de la stochasticité (The stochasticity problem)}
+Les jeux de Markov peuvent aussi être définis de manière stochastique où en plus de l'aléatoire défini par la fonction de transition, il peut y avoir aussi une composante aléatoire aussi sur les récompenses de sorte que $R_{i}$ est une variable aléatoire pour un même état s et sélection d'action a. Ce qui est problématique dans le cas à m joueurs, c'est qu'il est difficile de distinguer la variation dans la sélection des autres joueurs et la variation dans les récompenses. 
+% À révisier 
+
+\subsubsection{Le problème d'alter-exploration (The alter-exploration problem)}
+Un concept fondamental de l'apprentissage est le compromis exploration-exploitation. Lorsque $m$ joueurs participent à un jeu de Markov, si chacun a une probabilité d'explorer ($\epsilon$) (c'est-à-dire de choisir une action aléatoirement de façon à confirmer ses exclusions passées ou de découvrir de nouvelles actions plus payantes), la probabilité qu'au moins un des joueurs explore est appelé l'exploration globale est est défini par $\psi=1 - (1-\epsilon)^{m}$. L'exploration globale peut rapidement être trop grande en fonction de $\epsilon$ et $m$. Cela est important car pour des jeux qui demandent une grande coordination, il pourrait être difficile de maintenir un équilibre si à presque à chaque fois un des joueurs joue une action différente de celle dictée par la politique optimale. Les joueurs lors de leur apprentissage auront tendance à considérer le choix d'exploration des autres agents et ne pourront pas apprendre la politique idéale. 
+% À révisier aussi 
+
+\subsubsection{Le problème de l'équilibre ombré (Shadowed Equilibrium Problem)}
+\begin{definition}
+Un équilibre défini par la politique \(\bar{\pi}\) est dit être ombré par celui de la politique \(\hat{\pi}\) pour un état \(s\) si et seulement s'il existe un agent \(i\) et une politique \(\pi_{i}\) telles que
+\[
+U_{\langle \pi_{i}, \mathbf{\bar{\pi}}_{-i} \rangle}(s) < \min_{j,\pi_{j}} U_{\langle \pi_{j}, \mathbf{\hat{\pi}}_{-j} \rangle}(s).
+\], où $\mathbf{\pi}$ est la stratégie jointe de tous les joueurs, $\mathbf{\pi_{-i}}$ est la stratégie de tous les joueurs sauf le joueur i et où $\langle \pi_{i}, \mathbf{\pi_{-i}} \rangle $ est la stratégie jointe lorsque le joueur i adopte $\pi$ et que tous les autres joueurs adoptent la stratégie $\mathbf{\pi_{-i}}$
+\end{definition}
+Dans la situation où un équilibre A est ombrée par un équilibre B, il y a un joueur dans l'équilibre A pour qui, s'il s'écarte de la stratégie prévue, il subit une perte inférieure à celle que subirait n'importe quel joueur, lui inclus, suivant tout autre politique. Autrement dit, cela signifie que dans l'équilibre A, un joueur i qui s'écarte de la coordination, peut-être lors d'un pas de temps d'exploration, subit une perte significative de gains cumulés attendus. Si les agents ne parviennent pas à parfaitement se coordonner, il est préférable d'opter pour l'équilibre B, qui offre un gain cumulé attendu supérieur dans des conditions de coordination imparfaite. 
+
+Considérons le jeu d'escalade (climbing game utilisé dans \citet{claus_dynamics_nodate} 1998) avec deux joueurs et trois actions qui illustre très bien ce problème.
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c|cccc}
+  & & \multicolumn{3}{c}{\textbf{Joueur 2}} \\ 
+  & & a & b & c \\
+\hline
+\multirow{3}{*}{\textbf{Joueur 1}} 
+  & a & 11 & -30 & 0 \\
+  & b & -30 & 7 & 6 \\
+  & c & 0 & 0 & 5 \\
+\end{tabular}
+\caption{Climbing game \citet{claus_dynamics_nodate} 1998). Dans ce jeu, les agents pourraient choisir l'équilibre $\langle a,a \rangle$ pour une récompense de 11, ou l'équilibre $\langle b,b \rangle$ pour une récompense de 7, mais si un des agents dévie de cet équilibre , ils obtiennent une récompense de -30. Cela pourrait les inciter à choisir l'équilibre moins payant $\langle c,c \rangle$ avec une récompense de 5, mais pour lequel un écart de stratégie est certain de ne pas entraîner une récompense négative de -30.}
+\end{table}
+
+
+\section{Observation sur les algorithmes basiques}
+Cette section présente le comportement de certains algorithmes d'apprentissage par renforcement couramment utilisés, testés dans des contextes de jeux multi-agents. Bien qu’ils soient considérés comme "basiques" et performants dans des contextes standards (bandits, Q-learning) en environnement fixe — leur comportement peut varier de façon notable en environnement multi-agent, notamment en raison des problèmes soulevés dans la section précédente. Quatre types d’algorithmes sont examinés : UCB (Upper Confidence Bound, une stratégie efficace pour gérer le compromis exploration/exploitation dans les bandits), $\varepsilon$-greedy (une approche simple et largement utilisée), Exp3 (conçu pour les environnements adversarial), et Follow the Regularized Leader (un algorithme d’optimisation visant également à minimiser le regret).
+
+
+\subsection{Les stratégie de type UCB}
+Dans l'article de \cite{douglas_naive_2024}, les auteurs ont étudié la dynamique d’apprentissage dans le cadre du dilemme du prisonnier répété. Ils ont démontré, à la fois empiriquement et théoriquement, que l’algorithme UCB (Upper Confidence Bound) est en mesure de développer un comportement de type collusif. L’objectif de leur étude était de montrer que, malgré l’absence de connaissance a priori de la structure du jeu et sans observation directe des actions de l’adversaire, l’algorithme parvient à s’adapter à partir des seules récompenses reçues, et à apprendre une stratégie permettant de maintenir l’équilibre de Pareto du jeu. Ce processus conduit à une coordination implicite entre les agents, maximisant ainsi les gains cumulés sur le long terme. C'est intéressant pour le choix de l'équilibre. 
+
+\subsection{Les stratégies avec une exploration de type epsilon-greedy}
+Au contraire dans l'article de \citet{douglas_naive_2024}, les auteurs ont montré qu'il est impossible que l'algorithme de type epsilon greedy sur le jeu du dilemme du prisonnier, notamemnt de par le problème de l'ater-exploration apprennent à collusionner, deux agents epsilon-greedy ne pourront pas converger dans l'équilibre de pareto. De leur côté \citet{wunder_classes_nodate} étudient l'algorithme des type IQL– est un algorithme de type Q-learning qui opère en continu par mises à jour infinitésimales et qui, grâce à une exploration supplémentaire de type epsilon-greedy, sélectionne majoritairement l'action à la valeur maximale tout en choisissant aléatoirement les autres actions avec une faible probabilité. Dans le cas du dilemme du prisonnier, ils démontrent qu'avec certaines conditions initiales l'algorithme converge vers un équilibre, tandis que pour d'autres, il ne converge pas mais produit en moyenne des récompenses supérieures à l'équilibre de Nash, avec des expériences empiriques révélant un cycle où l'équilibre de Pareto prédomine la plupart du temps avant de se défaire périodiquement pour ensuite revenir.
+
+\subsection{Les stratégies de type Exp3}
+Pour l'algorithme Exp3, dans le jeu guerre des sexes un taux d'apprentissage trop grand mêne à un comportement chaotique de type "Li-Yorke" \citet{falniowski_discrete-time_2024}.
+
+\subsection{Les stratégie de type Follow the Leader}
+L’article de \citet{legacci_no-regret_2024} montre que la dynamique de l’algorithme Follow the Regularized Leader en version continue est récurrente au sens de Poincaré dans les jeux harmoniques. Autrement dit, quelle que soit la position initiale, l’algorithme revient infiniment souvent vers un état arbitrairement proche. De façon similaire, la version discrète de cet algorithme ne converge pas vers un équilibre. 
+
+%\subsection{Autres concepts}
+%Pour le jeux de Roche-papier-ciseau, certains algorithmes ont un comportement similaire à celui du replicator dynamic, lyapounov..., heteroclinic orbits autour de l'équilibre...
+%améliorer cette section...
+
+
+
+
+\section{Solutions apportées dans la littérature}
+
+\subsection{Modéliser l'adversaire et en tenir compte dans sa prise de décision}
+\citet{foerster_learning_2018} Dans cet article, les agents modélise l'apprentissage des autres agents et en connaissant les actions et les récompenses de chacun dans le cadre du dilemme du prisonnier itéré. Une version est aussi présenté lorsque seulement les actions sont présente.
+une version spécifique pour le Q learning dans le dilemme du prisonnier a été proposé \citet{aghajohari_loqa_2024}. En ajoutant une étape d'"extrapolation" à la version de follow the regularized leader, les auteurs de \citet{legacci_no-regret_2024} ont permis à ce nouvel algorithme de converger dans les jeux harmoniques plutôt qu'être point carré récurrent. 
+Dans une revue de la littérature sur les moyen de tenir compte la non-stationnarité \citet{hernandez-leal_survey_2019}, les stratégies stratégies qui tiennent compte de l'adversaire sont regroupées en trois groupes en fonction de leur niveau de complexité: \textit{Respond to target opponents}: qui suppose des stratégies employées par les adversaires, 
+\textit{Learn opponent models} pour apprendre le comportement de l’adversaire sans hypothèses préalables, ou \textit{Theory of mind} pour modéliser les croyances et intentions d’un adversaire stratégiquement adaptatif.
+
+\subsection{Modification de la fonction de récompenses}
+Modifier la fonction de récompense pour tenir compte des récompenses obtenues par les adversaires peut aider à orienter les agents vers des équilibres qui favorisent davantage le bien commun, par exemple dans l'article de \citet{hughes_inequity_2018}.
+Un article propose une idée originale où les agents ont la possibilité de modifier la fonction de récompense des autres agents \citet{chelarescu_deception_2021}, dans le but de favoriser la coopération. Cette approche a donné certains résultats, mais les auteurs ont aussi observé l’émergence de phénomènes de tromperie, où les modifications étaient utilisées pour nuire aux autres agents plutôt que pour coopérer.
+
+
+\subsection{Gérer le compromis entre apprendre et oublier}
+Une approche courante pour traiter la non-stationnarité induite par l’environnement est de gérer le compromis entre l’apprentissage de nouvelles informations et l’oubli des anciennes. Plusieurs algorithmes ont été adaptés afin de répondre à ce défi. Par exemple, dans le cas de l’algorithme UCB, des variantes ont été proposées, notamment une version avec fenêtre glissante et une autre avec une pondération en fonction de la récence de chaque donnée \citet{garivier_upper-confidence_2008}.
+
+\subsection{Ajuster du taux d'apprentissage}
+Une approche particulièrement pertinente pour gérer la non-stationnarité est la stratégie \textit{Win or Learn Fast} de \citet{bowling_multiagent_2002}. Lorsqu’un algorithme reçoit des récompenses supérieures à ses attentes, il ralentit son apprentissage afin de préserver l’avantage actuel. En revanche, en cas de performance inférieure, il accélère l’apprentissage pour ajuster rapidement son comportement.
+Dans la même lignée, l’algorithme Hysteretic Q-Learning propose deux taux d’apprentissage distincts : un taux plus faible pour désapprendre lentement les stratégies qui semblaient prometteuses, et un taux plus élevé pour intégrer plus rapidement les stratégies qui s’avèrent efficaces, compte tenu des croyances de l’algorithme \citet{matignon_hysteretic_2007}.
+
+
+\section{Applications}
+
+\subsection{Fairness}
+
+Les auteurs de \citet{puranik_long-term_2024} lancent un avertissement comme quoi un comportement non coordonné des agents peut entraîner un renforcement négatif, menant à une diminution de la proportion de candidats de groupes sous-représentés lors d'admission collégiales. 
+
+\subsection{Collusion}
+
+Dans l'article \citet{brown_competition_2023}, les auteurs ont étudié les algorithmes de fixation de prix pour les marchés en ligne. Contrairement à la croyance selon laquelle l'augmentation de la compétition causée par une réduction des frictions lors des ventes allait mener à une baisse des prix, les avancées technologiques dans les algorithmes de fixation des prix ont eu l'effet opposé. Elles peuvent réduire la compétition, converger vers des équilibres de prix plus élevés, augmenter les profits des vendeurs, et engendrer une variabilité encore plus importante des prix.
+
+Dans l'article \citet{calvano_artificial_2020}, les auteurs ont étudié les stratégies de type Q-learning dans le cadre, encore une fois, d’une compétition entre algorithmes de fixation de prix. Ils ont montré que ces algorithmes apprennent systématiquement à entrer en collusion, sans communiquer les uns avec les autres, et sans avoir été explicitement désignés ou instruits à le faire, notamment par le biais de mécanismes de punition. De façon plus générale, une comparaison d’une variété d’algorithmes a été réalisée pour évaluer leur potentiel à entrer en collusion dans
+\citet{sadoune_algorithmic_2024}.
+
+
+\subsection{Applications dans le domaine de l'économie}
+
+Dans \citet{balduzzi_open-ended_nodate}, les auteurs proposent de traiter la difficulté de coordination en ayant recours à l'apprentissage comme moyen de réduire le prix de l'anarchie — c’est-à-dire l’écart entre la solution optimale et celle atteinte lorsque chaque agent poursuit uniquement son propre intérêt. Ils mettent de l’avant une approche reposant sur la modélisation des adversaires, qui permet de mieux contenir ce prix de l’anarchie que des méthodes plus classiques, notamment dans une version modifiée du dilemme du prisonnier.
+En lien avec ce concept, \citet{carissimo_social_2023} montrent que dans le paradoxe de Braess, qui porte sur l’optimisation de l'utilisation d'un réseau routier, augmenter le taux d’exploration dans le Q-learning contribue également à réduire le prix de l’anarchie.
+Cet article \citet{taywade_modelling_2022} étudie le jeu de Cournot avec le multi-agent multi-armed bandit. Ce jeu illustre une situation de compétition entre plusieurs firmes vendant des produits similaires, où chaque firme cherche à déterminer son niveau de production optimal, tout en tenant compte du fait que la production totale influence directement le prix de marché.
+
+
+\section{Nouvelles perspectives de recherche}
+%ajouter les citations  et des perspectives!!!
+\subsection{Des situations plus réelles et plus applicables}
+La majorité des travaux se concentrent encore sur des jeux simples, et il reste du chemin à faire pour mieux comprendre les dynamiques dans des contextes plus réalistes. Dans \citet{hernandez-leal_survey_2019}, on propose de considérer des jeux où les actions ne sont pas toutes choisies simultanément par les agents, mais plutôt à différents pas de temps et à des rythmes variés. Il est aussi suggéré de tenir compte de l’arrivée et du départ d’agents dans l’environnement, ainsi que de la présence d’agents plus hétérogènes, avec des motivations ou des politiques différentes. 
+
+\subsection{Émergence et situations plus complexes}
+Les phénomènes d’émergence sont souvent liés à des boucles de rétroaction. Par exemple, dans le cas des modèles génératifs, une inquiétude soulevée est que si les agents génèrent du texte ou des images qui se retrouvent ensuite sur Internet, alors les nouvelles données d'entraînement risquent d’être contaminées. Cette boucle de rétroaction pourrait entraîner des problèmes comme une réduction du vocabulaire ou l’apparition d’artefacts dans la génération d’images. Ce sont des problèmes déjà identifiés, mais il est probable que d’autres apparaissent à mesure que ces systèmes deviennent plus répandus.
+Les boucles de rétroaction peuvent également mener à l’émergence et à l’apprentissage de nouvelles stratégies ou propriétés \citet{baker_emergent_2020}. C’est d’ailleurs une idée centrale du self-play : les agents apprennent entre eux des comportements qu’on ne pourrait pas forcément prévoir à l’avance. Un axe de recherche intéressant serait la découverte de ces boucles de rétroaction en contexte multi-agents, à des niveaux de complexité plus élevés.
+
+\section{Conclusion}
+
+Cette revue de littérature met en évidence que, dans un système multi-agents, les comportements des autres agents influencent de manière déterminante l’apprentissage et la performance d’un agent individuel dans la recherche d’une solution optimale. L’analyse des boucles de rétroaction, des défis posés par les jeux de Markov et des stratégies d’apprentissage pour pallier à ses défis confirme la pertinence de cette problématique au cœur des recherches dans les systèmes multi-agents.
+%Ajouter d'autres sections
+
+%Ajouter conclusion
+
+
+%\subsection{l'émergence et la LLM}
+%\citet{baker_emergent_2020}
+%\citet{greenblatt_alignment_2024}
+%\subsection{Apprentissage dans les jeux vidéos}
+%\citet{noauthor_alphastar_2025}
+%\citet{panait_cooperative_2005}
+%Article pour dire que le braess paradox est un exemple de social learning. Adding more route 
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+\end{document}
