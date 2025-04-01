@@ -1,1 +1,2 @@
-# RPS
+# Regroupement Maîtrise
+
