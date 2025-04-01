@@ -1,0 +1,94 @@
+\documentclass[aspectratio=169, xcolor=dvipsnames]{beamer}
+
+% If not already included:
+\usepackage{xcolor}
+
+% ----------------------------------------------------------------------
+% THEME & COLORS
+% ----------------------------------------------------------------------
+\usetheme{SimpleDarkBlue}
+
+% In Beamer, the color for the frame title is controlled via:
+%    \setbeamercolor{frametitle}{bg=<color>, fg=<color>}
+%
+% We use an AtBeginSection hook to apply a color change at the start of each section.
+% ----------------------------------------------------------------------
+\AtBeginSection[]{
+    % We'll check the current value of the "section" counter.
+    \ifnum\value{section}=1
+        \setbeamercolor{frametitle}{bg=MidnightBlue, fg=white}
+    \fi
+    \ifnum\value{section}=2
+        \setbeamercolor{frametitle}{bg=ForestGreen, fg=white}
+    \fi
+    \ifnum\value{section}=3
+        \setbeamercolor{frametitle}{bg=BrickRed, fg=white}
+    \fi
+    % ... repeat or adapt for more sections if needed ...
+}
+
+% ----------------------------------------------------------------------
+% TITLE PAGE INFO
+% ----------------------------------------------------------------------
+\title{notes de maîtrise}
+\subtitle{Objectif: rapidité}
+\author{Julien Armand}
+\institute{Université Laval}
+\date{\today}
+
+\begin{document}
+
+% TITLE FRAME
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% TABLE OF CONTENTS
+\begin{frame}{Overview}
+    \tableofcontents
+\end{frame}
+
+%------------------------------------------------
+\section{First Section}
+%------------------------------------------------
+
+\begin{frame}{Bullet Points}
+    \begin{itemize}
+        \item Feedback loop 
+        \item Marl
+        \item Théorie des jeux
+    \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\section{Second Section}
+%------------------------------------------------
+
+\begin{frame}{Classification des feedbacks loops}
+    \begin{itemize}
+        \item sampling
+        \item individual
+        \item label
+        \item model
+        \item outcome
+    \end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\section{Third Section}
+%------------------------------------------------
+
+\begin{frame}{Théorie des jeux}
+    \begin{itemize}
+        \item zero sum game
+        \item Équilibre de Nash
+        \item Équilibre minmax
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{The End}
+    \centering
+    \Huge{Merci!}
+\end{frame}
+
+\end{document}
