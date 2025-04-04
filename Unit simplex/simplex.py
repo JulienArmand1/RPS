@@ -19,13 +19,13 @@ def replicator_dynamics_2x2(A, B, resolution=21):
     plt.quiver(X, Y, x_point, y_point, color='black', angles='xy')
     plt.xlim(0, 1)
     plt.ylim(0, 1)
-    plt.xlabel('p (Population ligne joue stratégie 0)')
-    plt.ylabel('q (Population colonne joue stratégie 0)')
+    plt.xlabel('(Proportion de la population joueur 1 qui joue l\'action A)')
+    plt.ylabel('(Proportion de la population joueur 2 qui joue l\'action A)')
     plt.gca().set_aspect('equal', adjustable='box')
 
-# --- Définition de 3 jeux classiques ---
 
-# 1) Prisoner's Dilemma (payoff row, payoff column)
+
+# 1) Prisoner's Dilemma
 A_PD = np.array([[3, 0],
                  [5, 1]])
 B_PD = np.array([[3, 5],
@@ -40,7 +40,7 @@ B_SH = np.array([[4, 3],
 # 3) Matching Pennies
 A_MP = np.array([[1, -1],
                  [-1, 1]])
-B_MP = -A_MP  # Jeu à somme nulle
+B_MP = -A_MP
 
 # 4) Autre
 A_A = np.array([[6, 0],
@@ -48,21 +48,23 @@ A_A = np.array([[6, 0],
 B_A = np.array([[6, 15],
                  [0, 1]])
 
-# --- Affichage de chaque jeu sur une figure distincte ---
+A_A2 = np.array([[6, 1],
+                 [0, 8]])
+B_A2 = np.array([[6, 0],
+                 [1, 8]])
 
-# Prisoner's Dilemma
+
 plt.figure(figsize=(6, 6))
 replicator_dynamics_2x2(A_PD, B_PD, resolution=21)
 plt.title("Prisoner's Dilemma")
 plt.show()
 
-# Stag Hunt
+
 plt.figure(figsize=(6, 6))
 replicator_dynamics_2x2(A_SH, B_SH, resolution=21)
 plt.title("Stag Hunt")
 plt.show()
 
-# Matching Pennies
 plt.figure(figsize=(6, 6))
 replicator_dynamics_2x2(A_MP, B_MP, resolution=21)
 plt.title("Matching Pennies")
@@ -233,112 +235,39 @@ class Environnement:
                 self.agents[i].update_recompense(self.A[1,1])
                 self.agents[i+1].update_recompense(self.B[1,1])
 
-if __name__ == "__main__":
-    A = A_A
-    B = B_A
+random.seed(5)
 
-    random.seed(5)
+def graphique(A, B, titre, algo):
+    for _ in range(10):
 
-    for i in range(10):
-        # L'environnement
         environnement = Environnement(A, B)
-
-        # Ajout des agents dans l'environnement
-        agent1 = Agent("Agent_1", m=1, epsilon=0.03, decay=True, algo="exp3")
+        agent1 = Agent("Agent_1", m=1, epsilon=0.2, decay=True, algo=algo)
         environnement.ajouter_agents(agent1)
-        agent2 = Agent("Agent_2", m=1, epsilon=0.03, decay=True, algo="exp3")
+        agent2 = Agent("Agent_2", m=1, epsilon=0.2, decay=True, algo=algo)
         environnement.ajouter_agents(agent2)
 
-        # Exécution des expériences
         nombre_essai = 300
-        for i in range(nombre_essai):
+        for _ in range(nombre_essai):
             environnement.step()
-
-        # Affichage des historiques de probabilités pour vérification
-        for agent in environnement.agents:
-            print(f"{agent.nom} - Historique des probabilités:")
-            print(agent.histo_probabilities)
-
-        # Extraction des probabilités d'opter pour "A" (premier élément du tuple) pour chaque agent
-        x_line = [p for p in agent1.histo_probabilities]
-        y_line = [p for p in agent2.histo_probabilities]
-
-        # Matching Pennies
+        
+        p_1 = [p for p in agent1.histo_probabilities]
+        p_2 = [p for p in agent2.histo_probabilities]
+        
         plt.figure(figsize=(6, 6))
         replicator_dynamics_2x2(A, B, resolution=21)
-        plt.title("Matching Pennies")
-
-        # Tracé de la ligne reliant les points (probabilité de choisir A pour Agent_1 vs Agent_2)
-        plt.plot(x_line, y_line, marker='o', linestyle='-', color='red')
+        plt.title(titre)
+        plt.plot(p_1, p_2, marker='o', linestyle='-', color='red')
         plt.xlabel("Probabilité de choisir A (Agent 1)")
         plt.ylabel("Probabilité de choisir A (Agent 2)")
         plt.show()
 
 
 
+graphique(A_MP, B_MP, "Matching Pennies exp3", "exp3")
+graphique(A_MP, B_MP, "Matching Pennies epsilon", "epsilon")
 
+graphique(A_PD, B_PD, "Prisoner's Dilemma exp3", "exp3")
 
-"""
-    # Avec moyenne
+graphique(A_A, B_A, "Autre exp3", "exp3")
 
-    A = A_MP
-    B = B_MP
-
-    num_trials = 10
-    num_steps = 300
-
-    # Pour stocker, pour chaque essai, l'historique (dans le temps) des probabilités de choisir A pour chaque agent.
-    all_prob_A_agent1 = []
-    all_prob_A_agent2 = []
-
-    for trial in range(num_trials):
-
-        # Initialisation de l'environnement et des agents avec le jeu Matching Pennies
-        env = Environnement(A_MP, B_MP)
-        agent1 = Agent("Agent_1", m=2, epsilon=0.03, decay=True, algo="exp3")
-        agent2 = Agent("Agent_2", m=2, epsilon=0.03, decay=True, algo="exp3")
-        env.ajouter_agents(agent1)
-        env.ajouter_agents(agent2)
-
-        # Exécution de l'expérience
-        for _ in range(num_steps):
-            env.step()
-
-        # Extraction de l'historique des probabilités pour l'action A (première composante)
-        prob_A_agent1 = [p for p in agent1.histo_probabilities]
-        prob_A_agent2 = [p for p in agent2.histo_probabilities]
-        all_prob_A_agent1.append(prob_A_agent1)
-        all_prob_A_agent2.append(prob_A_agent2)
-
-    # Conversion en tableaux numpy pour faciliter la moyenne
-    all_prob_A_agent1 = np.array(all_prob_A_agent1)  # Dimension: (num_trials, num_steps)
-    all_prob_A_agent2 = np.array(all_prob_A_agent2)
-
-    # Calcul de la moyenne (pour chaque pas de temps) sur les essais
-    avg_prob_A_agent1 = np.mean(all_prob_A_agent1, axis=0)
-    avg_prob_A_agent2 = np.mean(all_prob_A_agent2, axis=0)
-
-    # --- Tracé du résultat ---
-    plt.figure(figsize=(10, 5))
-    plt.plot(avg_prob_A_agent1, label="Agent_1 - moyenne P(A)")
-    plt.plot(avg_prob_A_agent2, label="Agent_2 - moyenne P(A)")
-    plt.xlabel("Pas de temps")
-    plt.ylabel("Probabilité moyenne de choisir A")
-    plt.title("Moyenne des probabilités (P(A)) sur 10 essais")
-    plt.legend()
-    plt.show()
-
-    # Matching Pennies
-    plt.figure(figsize=(6, 6))
-    replicator_dynamics_2x2(A_MP, B_MP, resolution=21)
-    plt.title("Matching Pennies")
-
-
-    # Liste de points à relier par une ligne
-    x_line = avg_prob_A_agent1
-    y_line = avg_prob_A_agent2
-    # Ajout de la ligne dans le graphique
-    plt.plot(x_line, y_line, marker='o', linestyle='-', color='red')
-
-    plt.show()"
-"""
+graphique(A_A2, B_A2, "Autre 2 exp3", "exp3")
