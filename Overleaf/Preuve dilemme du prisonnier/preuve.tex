@@ -1,0 +1,155 @@
+\documentclass{article}
+\usepackage{amsmath}
+
+% Packages nécessaires
+\usepackage{graphicx}   % Pour insérer des images
+\usepackage{amsthm}     % Pour les environnements de théorèmes et définitions
+\usepackage{caption}    % Pour gérer les captions des tableaux et figures
+
+% Configuration des captions : centrage
+\captionsetup{justification=centering}
+
+% Informations sur le document
+\title{Preuve \(\epsilon\)-greedy}
+\author{Julien Armand}
+\date{February 2025}
+
+% Définition d'un nouvel environnement pour les définitions
+\theoremstyle{definition}
+\newtheorem{definition}{Définition}
+
+\begin{document}
+
+% Affichage du titre (décommenter la ligne suivante si souhaité)
+%\maketitle
+
+\section{Proof of the Instability of the Collaboration (Collusion) Mode in the Repeated Prisoner's Dilemma by Two \(\epsilon\)-Greedy Agents}
+
+\section{Prisoner's Dilemma Definition}
+
+\begin{definition}[Prisoner's Dilemma]
+The prisoner's dilemma game is played by two agents, each with two possible actions: \emph{cooperate} or \emph{defect}. Their choices determine the number of years of jail they will receive. If both cooperate, it signifies that neither agent \textquoteleft talks\textquoteright{} or snitches on the other.
+
+The repeated prisoner's dilemma is defined by the following bi-matrix:
+\end{definition}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|cc}
+       & Cooperate & Defect \\
+      \hline
+      Cooperate & \((R, R)\) & \((S, T)\) \\
+      Defect    & \((T, S)\) & \((P, P)\) \\
+    \end{tabular}
+    \caption{Bi-matrix for the Prisoner's Dilemma with \(T < R < P < S\).\\
+    \(T\): Temptation \quad \(R\): Reward \quad \(P\): Punishment \quad \(S\): Sucker's payoff}
+    \label{tab:prisoners_dilemma_general}
+\end{table}
+
+
+For example, consider the following bi-matrix:
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|cc}
+       & Cooperate & Defect \\
+      \hline
+      Cooperate & \((-1, -1)\) & \((-3, 0)\) \\
+      Defect    & \((0, -3)\) & \((-2, -2)\) \\
+    \end{tabular}
+    \caption{Example of a bi-matrix for the Prisoner's Dilemma with: \\
+    \(T = 0\), \quad \(R = -1\), \quad \(P = -2\), \quad \(S = -3\)}
+    \label{tab:prisoners_dilemma_example}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Je dois corriger le nombre d'année de prison...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Counts of events}
+
+Each time step, agents A and B play one action. For example, they can each play action C and the event is \((C,C)\).  
+We can define after \(n\) time step the counts of each event with 
+\[
+N[(C,C)] = a,\quad N[(C,D)] = b,\quad N[(D,C)] = c,\quad N[(D,D)] = d,
+\]
+so that \(a+b+c+d = n\).
+
+We can also define for the sake of clarity the count of each event at time \(t\) by
+\[
+N_{t}[(C,C)] = a(t),\quad N_{t}[(C,D)] = b(t),\quad N_{t}[(D,C)] = c(t),\quad N_{t}[(D,D)] = d(t).
+\]
+
+After \(n\) time step, the number of distinct 4-tuple \((a,b,c,d)\) is the number of compositions of \(n\) into 4 parts if we do not allow an agent to have never played an action after \(n\) time step. Its value is \(\binom{n-1}{3}\). If we lessen our constraint on the minimum number of times an action should be played, the number of distinct 4-tuple is the weak composition of \(n\) and its value is \(\binom{n+3}{3}\). 
+
+\section{Definition of the average reward after \(n\) time step}
+
+\subsection{Means for agent A}
+
+\[
+\mu_{AC} = \frac{a \cdot R + b \cdot S}{a+b} = S+\frac{a}{a+b} \cdot (R-S)
+\]
+\[
+\mu_{AD} = \frac{c \cdot T + d \cdot P}{c+d} = S+\frac{c}{c+d} \cdot (T-P)
+\]
+
+\subsection{Means for agent B}
+
+\[
+\mu_{BC} = \frac{a \cdot R + c \cdot S}{a+c} = S+\frac{a}{a+c} \cdot (R-S)
+\]
+\[
+\mu_{BD} = \frac{b \cdot T + d \cdot P}{b+d} = S+\frac{d}{b+d} \cdot (T-P)
+\]
+
+\section{Beginning of the proof}
+
+Suppose that after \(n\) time steps, we are in a situation where \(\mu_{AC} > \mu_{AD}\) and \(\mu_{BC} > \mu_{BD}\). In this situation, agents cooperate together and their strategies maximize their gains. However, they will quit this coordination almost surely if they follow an \(\epsilon\)-greedy policy. 
+
+With the previous means' inequalities, if agents followed an \(\epsilon'\)-greedy policy such that \(\epsilon'=2\epsilon\), the probability to observe each event at time \(n+1\) is given in the following table:
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|cc}
+       & Cooperate & Defect \\
+      \hline
+      Cooperate & \((1-\epsilon)^{2}\) & \(\epsilon \cdot(1-\epsilon)\) \\
+      Defect    & \((1-\epsilon) \cdot \epsilon\) & \(\epsilon^{2}\) \\
+    \end{tabular}
+    \caption{Probability to observe each event}
+    \label{tab:probability_events}
+\end{table}
+
+By narrowing our focus on agent 1, the means at time \(t\) is given by  
+\[
+\mu_{AC} = S+\frac{a(t)}{a(t)+b(t)} \cdot (R-S)
+\]
+\[
+\mu_{AD} = P+\frac{c(t)}{c(t)+d(t)} \cdot (T-P).
+\]
+
+Using the law of large numbers, we have
+\[
+\frac{a(t)}{a(t)+b(t)} \xrightarrow{\text{a.s.}} \frac{(1-\epsilon)^{2}}{(1-\epsilon)^{2}+\epsilon \cdot (1-\epsilon)} = \frac{1-\epsilon}{1-\epsilon+\epsilon} = 1-\epsilon,
+\]
+and
+\[
+\frac{c(t)}{c(t)+d(t)} \xrightarrow{\text{a.s.}} \frac{\epsilon \cdot (1-\epsilon)}{\epsilon \cdot (1-\epsilon)+\epsilon^{2}} = \frac{1-\epsilon}{1-\epsilon+\epsilon} = 1-\epsilon.
+\]
+
+Substituting into the means' equations, we get:
+\[
+\mu_{AC}=S+(1-\epsilon) \cdot (R-S)
+\]
+and
+\[
+\mu_{AD}=P+(1-\epsilon) \cdot (T-P).
+\]
+
+Since \(T>R>P>S\), the previous inequality no longer holds because \(\mu_{AC}\) is now lower than \(\mu_{AD}\). 
+
+By this change in the inequality, the policy of agent 1 is now modified and there is no longer cooperation, which proves the point that cooperation cannot hold with an \(\epsilon\)-greedy policy.
+
+\end{document}
+
